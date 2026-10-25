@@ -1,0 +1,61 @@
+<!doctype html><meta charset="utf-8">
+<style>[contenteditable=true]{border:1px solid gray;padding:20px}.tag-hash-o0tpyE{padding:8px;cursor:pointer}</style>
+<div id="limit"></div><button id="publish" onclick="window.published++">发布</button>
+<input type="file" accept="video/*"><input placeholder="填写作品标题，为作品获得更多流量">
+<div id="editor" contenteditable="true" data-slate-editor="true" data-placeholder="添加作品简介"><span data-string="true">用户原文🙂，保留真实的零宽字​符。</span><span data-zero-space="true">​</span><span contenteditable="false"><div data-mention="#">&nbsp;<span>#用户已有</span>&nbsp;</div></span><span data-string="true"> </span><span data-string="true" data-enter="true">​</span></div>
+<div class="mention-suggest-mount-dom"></div>
+<script>
+window.published = 0; window.clickedTopics = []; window.queries = [];
+window.options = {
+ '职场': [['职场日常','2.3万'],['职场','4216.1亿'],['职场穿搭','9999亿'],['职场沟通','8千']],
+ '情绪': [['情绪管理','181.6亿'],['情绪复盘','无数据显示']],
+ '用户': [['用户已有','99999亿']],
+ '空': [],
+};
+const editor = document.querySelector('#editor'), suggestions = document.querySelector('.mention-suggest-mount-dom');
+const marker = () => editor.querySelector('[data-enter=true]');
+const clean = () => {const c=editor.cloneNode(true);c.querySelectorAll('[data-enter=true],[data-zero-space=true]').forEach(x=>x.remove());return c.textContent};
+function caret(node) {const r=document.createRange();r.selectNodeContents(node);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+editor.addEventListener('beforeinput', e => {
+ if (e.inputType !== 'insertText') return;
+ // Simulate Slate routing insertions before its internal trailing empty marker.
+ const s=getSelection(); const anchor=s.anchorNode;
+ e.preventDefault();
+ if(!s.isCollapsed){
+   const text=document.createElement('span');text.dataset.string='true';text.textContent=e.data;
+   const empty=document.createElement('span');empty.dataset.string='true';empty.dataset.enter='true';empty.textContent='\u200b';
+   editor.replaceChildren(text,empty);window.activeQueryLeaf=null;caret(text);editor.dispatchEvent(new Event('input'));return;
+ }
+ if(!window.activeQueryLeaf || !window.activeQueryLeaf.isConnected) {
+   const leaf=document.createElement('span');leaf.dataset.string='true';leaf.textContent='';
+   editor.insertBefore(leaf,marker());window.activeQueryLeaf=leaf;
+ }
+ window.activeQueryLeaf.textContent+=e.data;caret(window.activeQueryLeaf);editor.dispatchEvent(new Event('input'));
+});
+editor.addEventListener('input', () => {
+ suggestions.replaceChildren(); const m=clean().match(/ #([^\s#]*)$/); if(!m || !m[1]) return;
+ const query=m[1];window.queries.push(query);
+ if(window.mutateDuringSearch && query.length>1){window.mutateDuringSearch=false;const t=document.createElement('span');t.textContent='用户新加的文字';editor.insertBefore(t,marker());return;}
+ for(const [name,count] of (window.options[query] || [])) {
+  const row=document.createElement('div');row.className='tag-hash-o0tpyE';
+  const n=document.createElement('span');n.className='tag-hash-view-name-DwMEe8';n.textContent=name;
+  const c=document.createElement('span');c.className='tag-hash-view-count-juN_70';c.textContent=count;row.append(n,c);
+  row.onclick=()=>{
+   window.clickedTopics.push(name);if(window.noEntity)return;
+   const leaves=Array.from(editor.querySelectorAll('[data-string=true]:not([data-enter])'));
+   const leaf=leaves.at(-1);const suffix=' #'+query;if(!leaf.textContent.endsWith(suffix))throw Error('Own query missing');
+   leaf.textContent=leaf.textContent.slice(0,-suffix.length);
+   const z=document.createElement('span');z.dataset.zeroSpace='true';z.textContent='\u200b';editor.insertBefore(z,marker());
+   const outer=document.createElement('span');outer.contentEditable='false';const mention=document.createElement('div');mention.dataset.mention='#';mention.textContent='\u00a0#'+name+'\u00a0';outer.append(mention);editor.insertBefore(outer,marker());
+   const trailing=document.createElement('span');trailing.dataset.string='true';trailing.textContent=' ';editor.insertBefore(trailing,marker());
+   suggestions.replaceChildren();window.activeQueryLeaf=null;caret(trailing);
+  };suggestions.append(row);
+ }
+});
+document.addEventListener('keydown', e=>{
+ if(e.key==='Escape'){suggestions.replaceChildren();window.activeQueryLeaf=null}
+ // Slate handles deletion through its model and keeps neighboring whitespace
+ // leaves. Native contenteditable's automatic whitespace merging is different.
+ if(e.key==='Backspace' && !getSelection().isCollapsed){e.preventDefault();getSelection().getRangeAt(0).deleteContents();editor.dispatchEvent(new Event('input'))}
+});
+</script>

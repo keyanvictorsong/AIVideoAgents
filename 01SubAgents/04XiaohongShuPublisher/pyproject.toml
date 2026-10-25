@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xiaohongshu-publisher"
+version = "0.1.0"
+description = "小红书视频上传、文案和自定义封面准备；最终发布由用户手动完成"
+requires-python = ">=3.11"
+dependencies = [
+  "Pillow>=11,<13",
+  "playwright>=1.50,<2",
+]
+
+[project.scripts]
+xhs-publisher = "xhs_publisher.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["xhs_publisher*"]

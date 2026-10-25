@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh"><meta charset="utf-8"><title>离线发布页测试</title>
+<style>
+body { font: 16px sans-serif; padding: 24px; }
+[hidden] { display: none !important; }
+button { margin: 8px; padding: 10px; }
+[role=dialog] { position: fixed; inset: 40px; background: #eee; padding: 30px; border: 1px solid black; }
+[contenteditable] { border: 1px solid gray; min-height: 70px; padding: 12px; }
+[role=option] { padding: 12px; border: 1px solid gray; cursor: pointer; }
+</style>
+<input id="video" type="file" accept="video/*,.mp4">
+<!-- Deliberately unrelated file input: cover code must use the dialog input. -->
+<input id="unrelated" type="file" accept="image/*" hidden>
+<main id="form" hidden>
+ <p id="upload-status">上传中</p>
+ <input id="title" placeholder="填写作品标题，为作品获得更多流量">
+ <div id="description" contenteditable="true" data-placeholder="添加作品简介"></div>
+ <section>
+  <div><button id="vertical" class="cover">选择封面</button><span>竖封面 3:4</span><span id="vertical-preview"></span></div>
+  <div><button id="horizontal" class="cover">选择封面</button><span>横封面 4:3</span><span id="horizontal-preview"></span></div>
+ </section>
+ <button id="collection">请选择合集</button>
+ <div role="listbox" id="options" hidden>
+  <div role="option">做饭日常<div>播放量：999万</div></div>
+  <div role="option">示例日常<div>播放量：1.2万</div></div>
+  <div role="option">示例教学<div>播放量：3.4万</div></div>
+ </div>
+ <button id="declaration">请选择自主声明</button>
+ <div id="declarations" hidden><button>内容由AI生成</button><button>无需声明</button></div>
+ <button id="publish">发布</button>
+ <div id="success" hidden>发布成功</div>
+</main>
+<div role="dialog" id="cover-dialog" hidden>
+ <button id="local-tab">本地上传</button>
+ <input id="cover-file" type="file" accept="image/*" hidden>
+ <canvas id="imported-preview" hidden></canvas>
+ <button id="apply-cover" disabled>完成</button>
+</div>
+<script>
+window.state = { covers: {}, published: 0, files: [] };
+const el = id => document.getElementById(id);
+el('video').addEventListener('change', () => {
+  state.files.push(['video', el('video').files[0].name]);
+  el('form').hidden = false;
+  el('upload-status').textContent = '上传成功';
+});
+document.querySelectorAll('.cover').forEach(button => button.onclick = () => {
+  state.editing = button.id;
+  el('cover-file').value = '';
+  el('cover-file').hidden = true;
+  el('apply-cover').disabled = true;
+  el('cover-dialog').hidden = false;
+});
+el('local-tab').onclick = () => el('cover-file').hidden = false;
+window.loadCoverPreview = async file => {
+  const bitmap = await createImageBitmap(file);
+  const canvas = el('imported-preview');
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  canvas.getContext('2d').drawImage(bitmap, 0, 0);
+  bitmap.close();
+  canvas.hidden = false;
+  state.importedDataURL = canvas.toDataURL();
+  el('apply-cover').disabled = false;
+};
+el('cover-file').addEventListener('change', () => loadCoverPreview(el('cover-file').files[0]));
+el('apply-cover').onclick = () => {
+  state.covers[state.editing] = el('cover-file').files[0].name;
+  el(state.editing).textContent = '更换封面';
+  const preview = document.createElement('img');
+  preview.src = state.importedDataURL;
+  el(state.editing + '-preview').replaceChildren(preview);
+  el('cover-dialog').hidden = true;
+};
+el('collection').onclick = () => el('options').hidden = !el('options').hidden;
+document.querySelectorAll('[role=option]').forEach(option => option.onclick = () => {
+  state.collection = option.childNodes[0].textContent;
+  el('collection').textContent = state.collection;
+  el('options').hidden = true;
+});
+el('declaration').onclick = () => el('declarations').hidden = false;
+el('declarations').querySelectorAll('button').forEach(option => option.onclick = () => {
+  state.declaration = option.textContent;
+  el('declaration').textContent = option.textContent;
+  el('declarations').hidden = true;
+});
+el('publish').onclick = () => {
+  state.published += 1;
+  if (!window.suppressSuccess) el('success').hidden = false;
+};
+</script></html>

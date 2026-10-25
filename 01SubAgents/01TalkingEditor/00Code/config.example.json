@@ -1,0 +1,25 @@
+{
+  "backend": "auto",
+  "model": null,
+  "language": "auto",
+  "planner": {
+    "max_pause": 0.9,
+    "keep_pause": 0.45,
+    "speech_padding": 0.14,
+    "min_keep": 0.75,
+    "min_filler_confidence": 0.85,
+    "max_cuts_per_window": 3,
+    "cut_window": 10,
+    "remove_fillers": true,
+    "remove_filler_audio": true
+  },
+  "captions": {
+    "max_line_chars": 14,
+    "max_lines": 2,
+    "max_duration": 4.2,
+    "highlights": true,
+    "keywords": []
+  },
+  "render": {"crf": 20, "preset": "fast", "threads": 4},
+  "clean_video": true
+}

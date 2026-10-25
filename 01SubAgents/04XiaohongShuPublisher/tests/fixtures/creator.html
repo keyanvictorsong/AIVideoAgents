@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh"><meta charset="utf-8"><title>小红书离线准备测试</title>
+<style>
+body { font: 16px sans-serif; padding: 24px; }
+[hidden] { display: none !important; }
+button { padding: 10px; margin: 8px; }
+[contenteditable] { border: 1px solid #888; min-height: 60px; padding: 12px; }
+canvas { width: 90px; height: 120px; }
+[role=dialog] { position: fixed; inset: 30px; background: #eee; padding: 30px; }
+</style>
+<input id="video" type="file" accept="video/*,.mp4">
+<input id="unrelated" type="file" accept="image/*" hidden>
+<main id="form" hidden>
+  <p id="upload-status">上传中</p>
+  <input id="title" placeholder="填写标题">
+  <div id="description" contenteditable="true" data-placeholder="填写正文"></div>
+  <button id="cover-open">设置封面</button>
+  <canvas id="cover-preview" width="120" height="160"></canvas>
+  <button id="publish">发布</button>
+</main>
+<div id="cover-dialog" role="dialog" hidden>
+  <p>本地上传封面</p>
+  <input id="cover-file" type="file" accept="image/*" hidden>
+  <canvas id="imported-preview" width="120" height="160"></canvas>
+  <button id="apply-cover" disabled>完成</button>
+</div>
+<script>
+window.state = { published: 0, videoFiles: [], coverFiles: [], staleImport: false, dropApply: false };
+const el = id => document.getElementById(id);
+for (const id of ['cover-preview', 'imported-preview']) {
+  const canvas = el(id);
+  canvas.getContext('2d').fillStyle = '#2255cc';
+  canvas.getContext('2d').fillRect(0, 0, canvas.width, canvas.height);
+}
+el('video').addEventListener('change', () => {
+  state.videoFiles.push(el('video').files[0].name);
+  el('form').hidden = false;
+  el('upload-status').textContent = '上传成功';
+});
+el('description').addEventListener('input', () => el('description').removeAttribute('data-placeholder'));
+el('cover-open').onclick = () => {
+  el('cover-file').value = '';
+  el('apply-cover').disabled = true;
+  el('cover-dialog').hidden = false;
+};
+el('cover-file').addEventListener('change', async () => {
+  const file = el('cover-file').files[0];
+  state.coverFiles.push(file.name);
+  if (!state.staleImport) {
+    const bitmap = await createImageBitmap(file);
+    const canvas = el('imported-preview');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0);
+    bitmap.close();
+  }
+  el('apply-cover').disabled = false;
+});
+el('apply-cover').onclick = () => {
+  if (!state.dropApply) {
+    const imported = el('imported-preview');
+    const preview = el('cover-preview');
+    preview.width = imported.width;
+    preview.height = imported.height;
+    preview.getContext('2d').drawImage(imported, 0, 0);
+  }
+  el('cover-dialog').hidden = true;
+};
+el('publish').onclick = () => { state.published += 1; };
+</script></html>

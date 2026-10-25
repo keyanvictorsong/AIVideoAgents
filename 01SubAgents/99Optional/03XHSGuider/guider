@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+guider_root=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+guider_bundle=$(CDPATH='' cd -- "$guider_root/../../.." && pwd)
+guider_python="$guider_bundle/.venv/bin/python"
+if [ ! -x "$guider_python" ]; then
+  guider_python=python3
+fi
+if ! "$guider_python" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)'; then
+  echo 'DYXHS Guider 需要 Python 3.11 或更新版本。' >&2
+  exit 1
+fi
+PYTHONPATH="$guider_root/src:$guider_bundle/01SubAgents/02DYXHSTitleTag/src${PYTHONPATH:+:$PYTHONPATH}" exec "$guider_python" -m dyxhs_guider "$@"

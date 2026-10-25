@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dyxhs-guider"
+version = "0.1.0"
+description = "Evidence-based public video reference research"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+dyxhs-guider = "dyxhs_guider.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

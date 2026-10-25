@@ -1,0 +1,16 @@
+{
+  "video_input": null,
+  "title": null,
+  "description": null,
+  "upload_ready": null,
+  "cover_vertical_trigger": null,
+  "cover_horizontal_trigger": null,
+  "cover_dialog": null,
+  "cover_image_input": null,
+  "cover_local_tab": null,
+  "cover_imported": null,
+  "cover_vertical_ready": null,
+  "cover_horizontal_ready": null,
+  "cover_next": null,
+  "cover_confirm": null
+}

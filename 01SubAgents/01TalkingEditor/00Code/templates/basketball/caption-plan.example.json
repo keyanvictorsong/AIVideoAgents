@@ -1,0 +1,33 @@
+{
+  "example_only": true,
+  "note": "Synthetic four-second example. These are test phrases, not a transcript or placement review of any real video.",
+  "placement_mode": "near_action",
+  "style": {
+    "font_size": 76,
+    "outline": 4,
+    "shadow": 2,
+    "primary_color": "#FFFFFF",
+    "accent_color": "#FFD83D",
+    "fade_ms": 80
+  },
+  "cues": [
+    {
+      "id": "synthetic-static",
+      "start": 0.25,
+      "end": 1.25,
+      "text": "好球",
+      "evidence": {"kind": "synthetic_test_text", "not_real_speech": true},
+      "position": {"x": 0.35, "y": 0.35}
+    },
+    {
+      "id": "synthetic-move",
+      "start": 2.0,
+      "end": 3.4,
+      "text": "漂亮",
+      "accent": true,
+      "evidence": {"kind": "synthetic_test_text", "not_real_speech": true},
+      "position": {"x": 0.65, "y": 0.50},
+      "end_position": {"x": 0.70, "y": 0.45}
+    }
+  ]
+}

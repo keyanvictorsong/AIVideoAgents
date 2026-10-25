@@ -1,0 +1,4 @@
+interface:
+  display_name: "TalkingEditor"
+  short_description: "Turn one talking-head video into a titled edit and cover"
+  default_prompt: "Use $talking-editor to turn this video into a fluent titled edit with subtitles and a matching cover."

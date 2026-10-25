@@ -1,0 +1,13 @@
+#!/bin/zsh
+set -eu
+task_root=${0:A:h}
+if [[ -x "$task_root/../../.venv/bin/python" ]]; then
+  task_python="$task_root/../../.venv/bin/python"
+elif [[ -x "$task_root/.venv/bin/python" ]]; then
+  task_python="$task_root/.venv/bin/python"
+else
+  print -u2 '请先按总目录 README.md 安装依赖。'
+  exit 1
+fi
+export PYTHONPATH="$task_root${PYTHONPATH:+:$PYTHONPATH}"
+exec "$task_python" -m xhs_publisher "$@"
