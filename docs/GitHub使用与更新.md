@@ -1,21 +1,21 @@
 # GitHub 获取与更新
 
-本项目作为独立的私有仓库维护。仓库只保存经过脱敏审核的通用源码、说明、空配置模板和合成测试；账号、登录会话、密钥、素材和个人偏好各自在自己的电脑保存。
+本项目作为独立的公开源码仓库维护。仓库只保存经过脱敏审核的通用源码、说明、空配置模板和合成测试；账号、登录会话、密钥、素材和个人偏好各自在自己的电脑保存。
 
 ## 朋友第一次获取
 
-先把自己的 GitHub 用户名告知维护者，并接受私有仓库访问邀请。仓库链接只有有权限的账号能访问；未获权限时看到无法访问页面，不代表链接一定有误。
+直接打开 [仓库页面](https://github.com/keyanvictorsong/AIVideoAgents) 或 [下载 ZIP](https://github.com/keyanvictorsong/AIVideoAgents/archive/refs/heads/main.zip)，无需登录或访问邀请。
 
-有 Git 时，在自己的终端把下面地址替换为实际私有仓库的 HTTPS 地址：
+有 Git 时，在自己的终端执行：
 
 ```sh
-git clone "<实际仓库地址>" AIVideoAgents
+git clone https://github.com/keyanvictorsong/AIVideoAgents.git
 cd AIVideoAgents
 python3.12 tools/install.py
 python3 tools/doctor.py
 ```
 
-GitHub 身份验证使用本人自己的 Git 客户端登录或系统凭据管理器，不把 token 写到仓库地址、源码或聊天中。没有 Git 时可登录 GitHub，打开仓库页，通过 Code → Download ZIP 获取，再按 README 安装。
+下载和克隆公开仓库无需 GitHub 身份验证；向仓库推送更改仍需写入权限，使用本人自己的 Git 客户端登录或系统凭据管理器，不把 token 写到仓库地址、源码或聊天中。没有 Git 时通过 ZIP 获取，再按 README 安装。
 
 用 AI 编程助手打开整个 `AIVideoAgents` 文件夹，先读 `AGENTS.md`。把自己的视频交给助手，并说明视频类型、风格及目标平台。账户登录和封面页面选择器需要在本人电脑配置，安装完并不等于已经完成平台适配。
 
@@ -52,4 +52,4 @@ git push origin main
 
 `--repo` 检查 Git 索引里的实际内容，包括已暂存但工作树又被改回的文件；不会遍历或上传本人本机 `.git`、被忽略的配置及素材。清单应与本次暂存快照匹配。提交作者使用仓库专用通用身份，不继承原工程作者邮箱；GitHub 登录凭据始终由本机凭据管理器提供。
 
-需要新的离线分享 ZIP 时，使用 `tools/build_share.py --help` 查看导出参数，导出位置放在仓库外。工具按审核后的文件名单导出，不能把整个用过的目录直接压缩。私有仓库不会自动给朋友开权限，需要维护者邀请相应 GitHub 账号；不要通过改成公开来临时解决访问问题。
+需要新的离线分享 ZIP 时，使用 `tools/build_share.py --help` 查看导出参数，导出位置放在仓库外。工具按审核后的文件名单导出，不能把整个用过的目录直接压缩。公开访问仅开放源码下载，不授予其他人仓库写入权限。

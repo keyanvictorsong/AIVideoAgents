@@ -586,13 +586,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 4368,
-      "sha256": "0712446f7c3148a8f6b669eab53957bf6f6db2f28b5c10cd806acd9a2e3bf0d8"
+      "bytes": 4365,
+      "sha256": "a613fbec8775d8bf79a7478c1ac21e1dc9e29a1442906d81088825766db328e1"
     },
     {
       "path": "docs/GitHub使用与更新.md",
-      "bytes": 3750,
-      "sha256": "953e442d3597d23584aecd790ec7c888ff4eadbef9398a2822bb7b0a5b0d446a"
+      "bytes": 3675,
+      "sha256": "1a9c535e88fdaf65b78cd962b72456383f62ceb64c3638a4da168c2fbf84e685"
     },
     {
       "path": "docs/交付检查.md",

@@ -2,7 +2,7 @@
 
 把这个文件夹放到你自己的电脑，用熟悉的 AI 编程助手打开整个目录，让它先读 `AGENTS.md`。这里是可执行源码和工作流程；AI 助手、平台账号、API 服务和视频素材由你自己准备。
 
-从私有 GitHub 仓库获取时，先由维护者为你的 GitHub 账号开通访问权限，再用仓库页面的 Code → Download ZIP 下载，或克隆仓库。克隆后可用 `git pull --ff-only` 获取更新；安装、登录和使用自己的素材只需在本机完成。详见 [GitHub 获取与更新](docs/GitHub使用与更新.md)。
+仓库现已公开，可[直接下载 ZIP](https://github.com/keyanvictorsong/AIVideoAgents/archive/refs/heads/main.zip)，或克隆仓库，无需邀请。克隆后可用 `git pull --ff-only` 获取更新；安装、平台登录和使用自己的素材只需在本机完成。详见 [GitHub 获取与更新](docs/GitHub使用与更新.md)。
 
 ## 包含什么
 
